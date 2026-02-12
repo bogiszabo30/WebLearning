@@ -1,13 +1,13 @@
-package dev.bogi.web_learning;
+package dev.bogi.weblearning;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class WebLearningApplicationTests {
+class WeblearningApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
