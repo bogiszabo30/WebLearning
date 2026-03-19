@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import LoginComponent from '../components/logincomponent.vue'
+import LoginComponent from '../components/LoginComponent.vue'
 
 
 </script >

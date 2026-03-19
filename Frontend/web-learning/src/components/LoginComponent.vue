@@ -10,7 +10,7 @@
         <label for="password">Password:</label>
         <input id="password" v-model="password" type="password" required />
       </div>
-      <button type="submit">Login</button>
+      <button class="px-2 py-1 bg-blue-200" type="submit">Login</button>
     </form>
     <p v-if="message" :class="{ error: isError }">{{ message }}</p>
   </div>
@@ -18,7 +18,9 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const username = ref('')
 const password = ref('')
 const message = ref('')
@@ -49,6 +51,10 @@ const submitLogin = async () => {
       username.value = ''
       password.value = ''
       console.log(text) // contains {"status":"success"} from Spring
+      
+      // Wait 500ms and navigate to dashboard
+      await new Promise(resolve => setTimeout(resolve, 500))
+      router.push({ name: 'dashboard' })
     } else {
       message.value = 'Invalid username or password'
       isError.value = true
