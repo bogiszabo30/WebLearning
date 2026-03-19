@@ -1,10 +1,20 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 defineProps<{ msg: string }>()
 
 const count = ref(0)
-</script>
+const username = ref('username')
+console.log(username)
+watch(username, (newValue, oldValue) => {
+  console.log('Username changed:')
+  console.log('Old:', oldValue)
+  console.log('New:', newValue)
+})
+
+username.value = 'newUsername'
+</script >
+
 
 <template>
   <h1>{{ msg }}</h1>
