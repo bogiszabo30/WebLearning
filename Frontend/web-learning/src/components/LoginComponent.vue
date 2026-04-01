@@ -4,11 +4,11 @@
     <form @submit.prevent="submitLogin">
       <div>
         <label for="username">Username:</label>
-        <input id="username" v-model="username" type="text" required />
+        <input id="username" v-model="username" type="text" required class="ui-input"/>
       </div>
       <div>
         <label for="password">Password:</label>
-        <input id="password" v-model="password" type="password" required />
+        <input id="password" v-model="password" type="password" required class="ui-input"/>
       </div>
       <button class="px-2 py-1 bg-blue-200" type="submit">Login</button>
     </form>

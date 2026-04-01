@@ -6,9 +6,11 @@ import LoginComponent from '../components/LoginComponent.vue'
 
 
 <template>
- <LoginComponent>
-    
- </LoginComponent>
+    <div class="flex items-center justify-center h-screen">
+        <LoginComponent>
+            
+        </LoginComponent>
+    </div>
 </template>
 
 <style scoped>
