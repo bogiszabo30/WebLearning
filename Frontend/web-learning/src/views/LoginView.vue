@@ -2,17 +2,15 @@
 import LoginComponent from '../components/LoginComponent.vue'
 
 
-</script >
+</script>
 
 
 <template>
-    <div class="flex items-center justify-center h-screen">
-        <LoginComponent>
-            
-        </LoginComponent>
-    </div>
+
+    <LoginComponent>
+
+    </LoginComponent>
+
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
