@@ -6,6 +6,12 @@ import { UserRound, LogOut } from 'lucide-vue-next'
 const isMenuOpen = ref(false)
 const route = useRoute()
 
+const navLinks = [
+    { to: '/login', label: 'Login' },
+    { to: '/register', label: 'Register' },
+    { to: '/dashboard', label: 'Dashboard' }
+]
+
 const toggleMenu = () => {
     isMenuOpen.value = !isMenuOpen.value
 }
@@ -25,19 +31,10 @@ const isActive = (path) => {
         <div class="max-w-7xl mx-auto p-2 flex items-center justify-between relative">
             <div class="text-2xl font-bold text-blue-600">WebLearning</div>
             <div id="nav-links" class="flex gap-6 absolute left-1/2 -translate-x-1/2">
-                <RouterLink to="/login" :class="isActive('/login') ? 'text-blue-600 font-semibold' : 'text-gray-700'"
+                <RouterLink v-for="link in navLinks" :to="link.to"
+                    :class="isActive(link.to) ? 'text-blue-600 font-semibold' : 'text-gray-700'"
                     class="hover:text-blue-600 transition">
-                    Login
-                </RouterLink>
-                <RouterLink to="/register"
-                    :class="isActive('/register') ? 'text-blue-600 font-semibold' : 'text-gray-700'"
-                    class="hover:text-blue-600 transition">
-                    Register
-                </RouterLink>
-                <RouterLink to="/dashboard"
-                    :class="isActive('/dashboard') ? 'text-blue-600 font-semibold' : 'text-gray-700'"
-                    class="hover:text-blue-600 transition">
-                    Dashboard
+                    {{ link.label }}
                 </RouterLink>
             </div>
             <div class="relative">
