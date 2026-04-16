@@ -1,9 +1,10 @@
 <script setup>
-import { ref } from 'vue'
-import { RouterLink } from 'vue-router'
+import { ref, computed } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
 import { UserRound, LogOut } from 'lucide-vue-next'
 
 const isMenuOpen = ref(false)
+const route = useRoute()
 
 const toggleMenu = () => {
     isMenuOpen.value = !isMenuOpen.value
@@ -11,6 +12,10 @@ const toggleMenu = () => {
 
 const closeMenu = () => {
     isMenuOpen.value = false
+}
+
+const isActive = (path) => {
+    return route.path === path
 }
 </script>
 
@@ -20,13 +25,18 @@ const closeMenu = () => {
         <div class="max-w-7xl mx-auto p-2 flex items-center justify-between relative">
             <div class="text-2xl font-bold text-blue-600">WebLearning</div>
             <div id="nav-links" class="flex gap-6 absolute left-1/2 -translate-x-1/2">
-                <RouterLink to="/login" class="text-gray-700 hover:text-blue-600 transition">
+                <RouterLink to="/login" :class="isActive('/login') ? 'text-blue-600 font-semibold' : 'text-gray-700'"
+                    class="hover:text-blue-600 transition">
                     Login
                 </RouterLink>
-                <RouterLink to="/register" class="text-gray-700 hover:text-blue-600 transition">
+                <RouterLink to="/register"
+                    :class="isActive('/register') ? 'text-blue-600 font-semibold' : 'text-gray-700'"
+                    class="hover:text-blue-600 transition">
                     Register
                 </RouterLink>
-                <RouterLink to="/dashboard" class="text-gray-700 hover:text-blue-600 transition">
+                <RouterLink to="/dashboard"
+                    :class="isActive('/dashboard') ? 'text-blue-600 font-semibold' : 'text-gray-700'"
+                    class="hover:text-blue-600 transition">
                     Dashboard
                 </RouterLink>
             </div>
