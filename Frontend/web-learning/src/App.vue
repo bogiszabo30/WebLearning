@@ -1,9 +1,9 @@
-
-
 <script setup lang="ts">
-import {RouterView} from 'vue-router'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <RouterView></RouterView>
+  <div class="flex items-center justify-center h-screen">
+    <RouterView></RouterView>
+  </div>
 </template>

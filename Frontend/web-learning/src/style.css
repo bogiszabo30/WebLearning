@@ -2,6 +2,48 @@
 
 @layer components {
   .ui-input {
-    @apply border-2 border-blue-300;
+    @apply border-2 border-blue-300 rounded px-2 py-1 text-sm;
   }
+
+  .ui-input:focus {
+    @apply border-2 border-purple-400 outline-none;
+  }
+
+  .btn-primary {
+    @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+  }
+
+  .btn-primary:hover {
+    @apply bg-blue-400 text-white font-bold py-2 px-4 rounded;
+  }
+
+  .btn-primary:active {
+    @apply bg-blue-600 text-white font-bold py-2 px-4 rounded;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-500 text-white font-bold py-2 px-4 rounded;
+  }
+
+  .btn-secondary:hover {
+    @apply bg-gray-400 text-white font-bold py-2 px-4 rounded;
+  }
+
+  .btn-secondary:active {
+    @apply bg-gray-600 text-white font-bold py-2 px-4 rounded;
+  }
+
+  h1{
+    @apply text-3xl font-bold mb-4;
+  }
+
+  h2{
+    @apply text-2xl font-bold mb-3;
+  }
+
+  .island{
+    @apply border-2 border-gray-300 p-4 rounded-lg bg-gray-50;
+  }
+
 }
+

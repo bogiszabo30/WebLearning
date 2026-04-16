@@ -1,21 +1,3 @@
-<template>
-  <div class="login-container">
-    <h2>Login</h2>
-    <form @submit.prevent="submitLogin">
-      <div>
-        <label for="username">Username:</label>
-        <input id="username" v-model="username" type="text" required class="ui-input"/>
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input id="password" v-model="password" type="password" required class="ui-input"/>
-      </div>
-      <button class="px-2 py-1 bg-blue-200" type="submit">Login</button>
-    </form>
-    <p v-if="message" :class="{ error: isError }">{{ message }}</p>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
@@ -51,7 +33,7 @@ const submitLogin = async () => {
       username.value = ''
       password.value = ''
       console.log(text) // contains {"status":"success"} from Spring
-      
+
       // Wait 500ms and navigate to dashboard
       await new Promise(resolve => setTimeout(resolve, 500))
       router.push({ name: 'dashboard' })
@@ -66,15 +48,25 @@ const submitLogin = async () => {
 }
 </script>
 
-<style scoped>
-.login-container {
-  max-width: 300px;
-  margin: auto;
-  padding: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
+<template>
+  <div class="flex flex-col items-center justify-center max-w-2xl island">
+    <h2>Login</h2>
+    <div class="flex flex-col gap-2">
+      <label for="username">Username:</label>
+      <input id="username" v-model="username" type="text" required class="ui-input" />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="password">Password:</label>
+      <input id="password" v-model="password" type="password" required class="ui-input" />
+    </div>
+    <button class="btn-primary mt-2" @click="submitLogin">Login</button>
+    <p v-if="message" :class="{ error: isError }">{{ message }}</p>
+  </div>
+</template>
 
+
+
+<style scoped>
 .error {
   color: red;
 }

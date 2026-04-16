@@ -1,25 +1,3 @@
-<template>
-  <div class="register-container">
-    <h2>Register</h2>
-    <form @submit.prevent="submitRegister">
-      <div>
-        <label for="username">Username:</label>
-        <input id="username" v-model="username" type="text" required />
-      </div>
-      <div>
-        <label for="email">Email:</label>
-        <input id="email" v-model="email" type="email" required />
-      </div>
-      <div>
-        <label for="password">Password:</label>
-        <input id="password" v-model="password" type="password" required />
-      </div>
-      <button type="submit">Register</button>
-    </form>
-    <p v-if="message" :class="{ error: isError }">{{ message }}</p>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
 
@@ -65,15 +43,29 @@ const submitRegister = async () => {
 }
 </script>
 
-<style scoped>
-.register-container {
-  max-width: 400px;
-  margin: auto;
-  padding: 2rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
+<template>
+  <div class="flex flex-col items-center justify-center max-w-2xl island">
+    <h2>Register</h2>
+    <div class="flex flex-col gap-2">
+      <label for="username">Username:</label>
+      <input id="username" v-model="username" type="text" required class="ui-input" />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="email">Email:</label>
+      <input id="email" v-model="email" type="email" required class="ui-input" />
+    </div>
+    <div class="flex flex-col gap-2">
+      <label for="password">Password:</label>
+      <input id="password" v-model="password" type="password" required class="ui-input" />
+    </div>
+    <button class="btn-primary mt-2" @click="submitRegister">Register</button>
+    <p v-if="message" :class="{ error: isError }">{{ message }}</p>
+  </div>
+</template>
 
+
+
+<style scoped>
 .error {
   color: red;
 }
