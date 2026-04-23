@@ -1,5 +1,6 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
+import { authAPI } from '../services/apiService'
 
 const username = ref('')
 const email = ref('')
@@ -12,17 +13,7 @@ const submitRegister = async () => {
   isError.value = false
 
   try {
-    const response = await fetch('http://localhost:8080/api/register', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username.value,
-        email: email.value,
-        password: password.value,
-      }),
-    })
+    const response = await authAPI.register({ username: username.value, email: email.value, password: password.value })
 
     const data = await response.json()
 

@@ -1,16 +1,14 @@
-<script setup lang="ts">
+<script setup>
 import RegisterComponent from '../components/RegisterComponent.vue';
 
 
-</script >
+</script>
 
 
 <template>
- <RegisterComponent>
-    
- </RegisterComponent>
+    <RegisterComponent>
+
+    </RegisterComponent>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

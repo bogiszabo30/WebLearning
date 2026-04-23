@@ -1,6 +1,7 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { authAPI } from '../services/apiService'
 
 const router = useRouter()
 const username = ref('')
@@ -13,19 +14,9 @@ const submitLogin = async () => {
   isError.value = false
 
   try {
-    const response = await fetch('http://localhost:8080/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        username: username.value,
-        password: password.value,
-      }),
-      credentials: 'include', // important for cookies
-    })
+    const response = await authAPI.login({ username: username.value, password: password.value })
 
-    const text = await response.text()
+    const text = await response.json()
 
     if (response.ok) {
       message.value = 'Login successful!'

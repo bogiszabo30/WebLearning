@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import LoginComponent from '../components/LoginComponent.vue'
 
 
