@@ -16,16 +16,16 @@ const submitLogin = async () => {
   try {
     const response = await authAPI.login({ username: username.value, password: password.value })
 
-    const text = await response.json()
+    const text = response.data
 
     if (response.ok) {
       message.value = 'Login successful!'
       isError.value = false
       username.value = ''
       password.value = ''
-      console.log(text) // contains {"status":"success"} from Spring
+      console.log(text)
 
-      // Wait 500ms and navigate to dashboard
+
       await new Promise(resolve => setTimeout(resolve, 500))
       router.push({ name: 'dashboard' })
     } else {

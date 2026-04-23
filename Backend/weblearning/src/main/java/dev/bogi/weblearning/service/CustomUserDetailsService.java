@@ -1,9 +1,14 @@
 package dev.bogi.weblearning.service;
 
+import dev.bogi.weblearning.dto.AuthResponseDTO;
+import dev.bogi.weblearning.dto.LoginRequestDTO;
 import dev.bogi.weblearning.dto.RegistrationRequestDTO;
 import dev.bogi.weblearning.model.user.Role;
 import dev.bogi.weblearning.model.user.User;
 import dev.bogi.weblearning.repository.UserRepository;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,10 +19,12 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    public CustomUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public CustomUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
     }
     @Override
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
@@ -46,5 +53,21 @@ public class CustomUserDetailsService implements UserDetailsService {
         user.setPasswordHash(passwordEncoder.encode(requestDTO.password()));
         user.getRoles().add(Role.USER);
         return userRepository.save(user);
+    }
+
+    public AuthResponseDTO login(LoginRequestDTO requestDTO) {
+        // 1. Authenticate credentials
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        requestDTO.username(),
+                        requestDTO.password()
+                )
+        );
+
+        // 2. Generate JWT token
+        String token = jwtTokenProvider.generateToken(authentication);
+
+        return new AuthResponseDTO(token);
+
     }
 }
