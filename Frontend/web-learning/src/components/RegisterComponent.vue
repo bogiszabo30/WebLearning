@@ -15,16 +15,16 @@ const submitRegister = async () => {
   try {
     const response = await authAPI.register({ username: username.value, email: email.value, password: password.value })
 
-    const data = await response.json()
+    console.log(response)
 
-    if (data.status === 'success') {
+    if (response.data.status === 'success') {
       message.value = 'Registration successful!'
       isError.value = false
       username.value = ''
       email.value = ''
       password.value = ''
     } else {
-      message.value = data.message || 'Registration failed'
+      message.value = response.data.message || 'Registration failed'
       isError.value = true
     }
   } catch (e) {
