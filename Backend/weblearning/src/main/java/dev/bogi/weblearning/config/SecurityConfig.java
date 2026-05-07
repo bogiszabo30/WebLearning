@@ -1,5 +1,6 @@
 package dev.bogi.weblearning.config;
 
+import dev.bogi.weblearning.security.JwtAuthenticationFilter;
 import dev.bogi.weblearning.security.LoginSuccessHandler;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -22,54 +24,39 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
-    private final LoginSuccessHandler loginSuccessHandler;
-    private final UsernamePasswordAuthenticationFilter jwtAuthFilter;
+    private final JwtAuthenticationFilter jwtAuthFilter;
 
-    public SecurityConfig(LoginSuccessHandler loginSuccessHandler, UsernamePasswordAuthenticationFilter jwtAuthFilter) {
-        this.loginSuccessHandler = loginSuccessHandler;
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
     }
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
 
-                .sessionManagement(s ->
-                        s.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/login").permitAll()
                         .requestMatchers("/register").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/").permitAll()
-                        .anyRequest().authenticated()
-                )
+                        .requestMatchers("/health").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .anyRequest().authenticated())
 
-                // Keep form login ONLY if you actually need it alongside JWT
-                .formLogin(form -> form
-                        .loginProcessingUrl("/login")
-                        .successHandler(loginSuccessHandler)
-                        .failureHandler((req, res, ex) -> {
-                            res.setContentType("application/json");
-                            res.getWriter().write(
-                                    "{\"status\":\"error\",\"message\":\"Invalid credentials\"}"
-                            );
-                            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                        })
-                        .permitAll()
-                )
-
-                .httpBasic(Customizer.withDefaults())
-
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    @Value("${FRONTEND_URL}")  // inject the env var
+    @Value("${FRONTEND_URL:http://localhost:5173}")
     private String frontendUrl;
     @Bean
     public CorsFilter corsFilter() {
@@ -89,5 +76,4 @@ public class SecurityConfig {
             throws Exception {
         return config.getAuthenticationManager();
     }
-
 }

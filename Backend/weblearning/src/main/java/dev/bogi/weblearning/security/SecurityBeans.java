@@ -11,4 +11,5 @@ public class SecurityBeans {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

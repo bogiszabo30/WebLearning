@@ -1,8 +1,9 @@
 package dev.bogi.weblearning.controller;
 
 import dev.bogi.weblearning.dto.RegistrationRequestDTO;
-import dev.bogi.weblearning.service.CustomUserDetailsService;
+import dev.bogi.weblearning.service.AuthService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,19 +14,15 @@ import java.util.Map;
 @RestController
 @RequestMapping("/register")
 public class RegistrationController {
-    private final CustomUserDetailsService userService;
+    private final AuthService authService;
 
-    public RegistrationController(CustomUserDetailsService userService) {
-        this.userService = userService;
+    public RegistrationController(AuthService authService) {
+        this.authService = authService;
     }
 
     @PostMapping
-    public Map<String, String> register(@Valid @RequestBody RegistrationRequestDTO request) {
-        try {
-            userService.register(request);
-            return Map.of("status", "success");
-        } catch (RuntimeException e) {
-            return Map.of("status", "error", "message", e.getMessage());
-        }
+    public ResponseEntity<Map<String, String>> register(@Valid @RequestBody RegistrationRequestDTO request) {
+        authService.register(request);
+        return ResponseEntity.ok(Map.of("message", "Registration successful"));
     }
 }
