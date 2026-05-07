@@ -16,25 +16,24 @@ const submitLogin = async () => {
   try {
     const response = await authAPI.login({ username: username.value, password: password.value })
 
-    const text = response.data
+    message.value = 'Login successful!'
+    isError.value = false
+    username.value = ''
+    password.value = ''
+    console.log(response.data)
 
-    if (response.ok) {
-      message.value = 'Login successful!'
-      isError.value = false
-      username.value = ''
-      password.value = ''
-      console.log(text)
-
-
-      await new Promise(resolve => setTimeout(resolve, 500))
-      router.push({ name: 'dashboard' })
-    } else {
+    await new Promise(resolve => setTimeout(resolve, 500))
+    // router.push({ name: 'dashboard' })
+  } catch (error) {
+    if (error.response?.status === 401) {
       message.value = 'Invalid username or password'
-      isError.value = true
+    } else if (error.response) {
+      message.value = 'Login failed: ' + (error.response.data?.message || error.response.statusText)
+    } else {
+      message.value = 'Network error'
     }
-  } catch (e) {
-    message.value = 'Network error'
     isError.value = true
+    console.error(error)
   }
 }
 </script>
