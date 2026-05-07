@@ -7,6 +7,7 @@ import dev.bogi.weblearning.model.user.Role;
 import dev.bogi.weblearning.model.user.User;
 import dev.bogi.weblearning.repository.UserRepository;
 import dev.bogi.weblearning.security.JwtTokenProvider;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,20 +24,24 @@ import java.time.ZonedDateTime;
 public class AuthService implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
+    private final ObjectProvider<AuthenticationManager> authenticationManagerProvider;
     private final JwtTokenProvider jwtTokenProvider;
     private final UserRepository userRepository;
 
-    public AuthService(PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider,
+    public AuthService(PasswordEncoder passwordEncoder, ObjectProvider<AuthenticationManager> authenticationManagerProvider, JwtTokenProvider jwtTokenProvider,
                        UserRepository userRepository) {
         this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
+        this.authenticationManagerProvider = authenticationManagerProvider;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userRepository = userRepository;
     }
 
     @Transactional
     public AuthResponseDTO login(LoginRequestDTO requestDTO) {
+        AuthenticationManager authenticationManager = authenticationManagerProvider.getIfAvailable();
+        if (authenticationManager == null) {
+            throw new RuntimeException("AuthenticationManager not available");
+        }
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         requestDTO.username(),
