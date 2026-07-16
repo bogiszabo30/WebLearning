@@ -7,10 +7,12 @@ const email = ref('')
 const password = ref('')
 const message = ref('')
 const isError = ref(false)
+const messageColor = ref('')
 
 const submitRegister = async () => {
   message.value = ''
   isError.value = false
+  messageColor.value = ''
 
   try {
     const response = await authAPI.register({ username: username.value, email: email.value, password: password.value })
@@ -23,14 +25,18 @@ const submitRegister = async () => {
       username.value = ''
       email.value = ''
       password.value = ''
+      messageColor.value = 'text-green-400'
     } else {
       message.value = response.data.message || 'Registration failed'
       isError.value = true
+      messageColor.value = 'text-red-400'
     }
   } catch (e) {
     message.value = 'Network error'
     isError.value = true
+    messageColor.value = 'text-red-400'
   }
+
 }
 </script>
 
@@ -50,14 +56,10 @@ const submitRegister = async () => {
       <input id="password" v-model="password" type="password" required class="ui-input" />
     </div>
     <button class="btn-primary mt-2" @click="submitRegister">Register</button>
-    <p v-if="message" :class="{ error: isError }">{{ message }}</p>
+    <p v-if="message" :class="messageColor">{{ message }}</p>
   </div>
 </template>
 
 
 
-<style scoped>
-.error {
-  color: red;
-}
-</style>
+<style scoped></style>
