@@ -1,10 +1,13 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { RouterLink, useRoute } from 'vue-router'
+import { RouterLink, useRoute, useRouter } from 'vue-router'
 import { UserRound, LogOut } from 'lucide-vue-next'
+import { useAuth } from '../composables/useAuth.js'
 
 const isMenuOpen = ref(false)
 const route = useRoute()
+const router = useRouter()
+const { clearSession, isAuthenticated, getUsername } = useAuth()
 
 const navLinks = [
     { to: '/login', label: 'Login' },
@@ -19,6 +22,17 @@ const toggleMenu = () => {
 const closeMenu = () => {
     isMenuOpen.value = false
 }
+
+const logout = () => {
+    clearSession();
+    closeMenu();
+    router.push({ name: "Login" });
+};
+
+const userInitials = computed(() => {
+    if (!getUsername()) return "?";
+    return getUsername().slice(0, 2).toUpperCase();
+});
 
 const isActive = (path) => {
     return route.path === path
@@ -40,7 +54,7 @@ const isActive = (path) => {
             <div class="relative">
                 <button @click="toggleMenu"
                     class="size-10 bg-blue-400 rounded-full flex items-center justify-center text-white font-bold text-lg hover:bg-blue-500 transition cursor-pointer">
-                    XY
+                    {{ userInitials }}
                 </button>
 
                 <div v-if="isMenuOpen" @click="closeMenu" class="fixed inset-0 z-40"></div>
@@ -52,7 +66,7 @@ const isActive = (path) => {
                         Profil
                     </button>
                     <div class="border-t border-gray-200"></div>
-                    <button class="w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 transition">
+                    <button @click="logout" class="w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 transition">
                         <LogOut class="inline size-5" />
                         Kilépés
                     </button>

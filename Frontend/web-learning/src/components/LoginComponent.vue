@@ -2,8 +2,10 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { authAPI } from '../services/apiService'
+import { useAuth } from '../composables/useAuth.js'
 
 const router = useRouter()
+const { setSession } = useAuth()
 const username = ref('')
 const password = ref('')
 const message = ref('')
@@ -18,12 +20,11 @@ const submitLogin = async () => {
 
     message.value = 'Login successful!'
     isError.value = false
-    username.value = ''
-    password.value = ''
+    setSession(response.data.token, response.data.username)
     console.log(response.data)
 
     await new Promise(resolve => setTimeout(resolve, 500))
-    // router.push({ name: 'dashboard' })
+    router.push({ name: 'Dashboard' })
   } catch (error) {
     if (error.response?.status === 401) {
       message.value = 'Invalid username or password'

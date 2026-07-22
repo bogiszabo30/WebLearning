@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuth } from '../composables/useAuth.js'
 import LoginView from '../views/LoginView.vue'
 import RegisterView from '../views/RegisterView.vue'
 import DashboardView from '../views/DashboardView.vue'
@@ -25,8 +26,9 @@ const routes = [
   },
   {
     path: '/',
-    name: '',
-    component: DashboardView
+    name: 'Dashboard',
+    component: DashboardView,
+    meta: { requiresAuth: true }
   }
 ]
 
@@ -34,5 +36,16 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
+
+router.beforeEach((to) => {
+  const { isAuthenticated } = useAuth()
+  if (to.meta.requiresAuth && !isAuthenticated.value) {
+    return { name: 'Login' }
+  }
+  if ((to.name === 'Login' || to.name === 'Register') && isAuthenticated.value) {
+    return { name: 'Dashboard' }
+  }
+})
+
 
 export default router

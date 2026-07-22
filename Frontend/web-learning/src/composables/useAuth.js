@@ -10,6 +10,10 @@ export function useAuth() {
     return token.value
   } 
 
+  function getUsername() {
+    return username.value
+  }
+
   function clearSession() {
     username.value = null
     token.value = null
@@ -30,6 +34,7 @@ export function useAuth() {
   return {
     isAuthenticated,
     getToken,
+    getUsername,
     clearSession,
     setSession
   }
